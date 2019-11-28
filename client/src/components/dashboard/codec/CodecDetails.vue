@@ -35,7 +35,10 @@
           <v-list-tile>
             <v-list-tile-content>
               <v-list-tile-title>Adresse IP</v-list-tile-title>
-              <v-list-tile-sub-title>{{ codec.ip }}</v-list-tile-sub-title>
+              <v-list-tile-sub-title><a
+                  style="text-decoration:none;"
+                  v-bind:href="'http://'+codec.ip"
+                >{{ codec.ip }}</a></v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
 
