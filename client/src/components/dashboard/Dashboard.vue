@@ -19,11 +19,29 @@
         >
           <v-icon>add</v-icon>
         </v-btn>
+        <v-btn
+          fixed
+          dark
+          fab
+          top
+          right
+          color="red"
+          @click="showDialogLive = true;"
+          style="margin-top:130px"
+        >
+          <v-icon>cast</v-icon>
+        </v-btn>
         <v-dialog
           v-model="showDialogAdd"
           max-width="450"
         >
           <app-codec-add @closeDialog="showDialogAdd = false"></app-codec-add>
+        </v-dialog>
+        <v-dialog
+          v-model="showDialogLive"
+          max-width="1000"
+        >
+          <app-codec-live @closeDialog="showDialogLive = false"></app-codec-live>
         </v-dialog>
       </v-flex>
     </v-layout>
@@ -33,16 +51,19 @@
 <script>
 import CodecGrid from "./codec/CodecGrid.vue";
 import CodecAdd from "./codec/CodecAdd.vue";
+import CodecLive from "./codec/CodecLive.vue";
 
 export default {
   data() {
     return {
-      showDialogAdd: false
+      showDialogAdd: false,
+      showDialogLive: false
     };
   },
   components: {
     appCodecGrid: CodecGrid,
-    appCodecAdd: CodecAdd
+    appCodecAdd: CodecAdd,
+    appCodecLive: CodecLive
   },
   created() {
     this.$store.dispatch("fetchCodecs");
