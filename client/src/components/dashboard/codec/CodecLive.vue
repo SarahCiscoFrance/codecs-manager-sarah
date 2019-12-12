@@ -9,13 +9,25 @@
     >Live Proximity</v-card-title>
     <v-container>
       <div style="display:flex;">
-        <v-icon style="padding-right:3%; padding-left:3%;">wifi_off</v-icon>
+        <v-icon
+          :color="iconColor"
+          style="padding-right:3%; padding-left:3%;"
+        >wifi_off</v-icon>
         <v-switch
           v-model="switch1"
-          label="Désactiver Proximity de tous les endpoints du Showroom"
+          label="Régler à nulle la valeur de Proximity sur tous les endpoints du Showroom"
+          :color="iconColor"
           @change="switchChange(codecs)"
         >
         </v-switch>
+        <v-btn
+          color="success"
+          flat="flat"
+          @click="submitAll(codecs); snackbar = true;"
+        >
+          <v-icon left>leak_add</v-icon>
+          Modifier pour tous
+        </v-btn>
       </div>
       <v-flex
         v-for="codec in codecs"
@@ -89,6 +101,7 @@ export default {
       snackbar: false,
       timeout: 2000,
       switch1: false,
+      iconColor: "grey",
       minValue: 0,
       maxValue: 70
     };
@@ -102,10 +115,12 @@ export default {
     },
     switchChange(codecs) {
       if (this.switch1) {
+        this.iconColor = "red";
         codecs.forEach(element => {
           element.proximity = 0;
         });
       } else {
+        this.iconColor = "grey";
         codecs.forEach(element => {
           element.proximity = 70;
         });
@@ -138,6 +153,16 @@ export default {
         id: this.codecId,
         props: props
       });
+    },
+    async submitAll(codecs) {
+      //obligé de passer par un for sinon await pas reconnu
+      for (var index = 0; index < codecs.length; index++) {
+        var codec = codecs[index];
+        console.log("request being sent");
+        this.submit(codec);
+        var result = await resolveAfterSeconds();
+        console.log(result + " for codec" + codec.ip);
+      }
     }
   },
   computed: {
@@ -146,5 +171,14 @@ export default {
     }
   }
 };
+
+//cette fonction permet de brider la boucle for de submitAll()
+function resolveAfterSeconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve("request sending");
+    }, 100);
+  });
+}
 </script>
 
